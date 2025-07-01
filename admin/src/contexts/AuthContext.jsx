@@ -3,6 +3,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 
 const AuthContext = createContext()
+const url = "https://vmsolutiions-backend.onrender.com
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
