@@ -57,7 +57,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/admin/products')
+      const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/products')
       setProducts(response.data)
     } catch (error) {
       console.error('Error fetching products:', error)
@@ -152,10 +152,10 @@ const Products = () => {
       }
 
       if (editingProduct) {
-        await axios.put(`/api/admin/products/${editingProduct._id}`, productData)
+        await axios.put(`https://vmsolutiions-backend.onrender.com/api/admin/products/${editingProduct._id}`, productData)
         toast.success('Product updated successfully')
       } else {
-        await axios.post('/api/admin/products', productData)
+        await axios.post('https://vmsolutiions-backend.onrender.com/api/admin/products', productData)
         toast.success('Product created successfully')
       }
 
@@ -197,7 +197,7 @@ const Products = () => {
   const handleDelete = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/api/admin/products/${productId}`)
+        await axios.delete(`https://vmsolutiions-backend.onrender.com/api/admin/products/${productId}`)
         toast.success('Product deleted successfully')
         fetchProducts()
       } catch (error) {

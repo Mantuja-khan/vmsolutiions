@@ -157,7 +157,7 @@ const InsuranceForm = () => {
         ...formData
       }
 
-      await axios.post('/api/applications', applicationData)
+      await axios.post('https://vmsolutiions-backend.onrender.com/api/applications', applicationData)
       toast.success('Insurance application submitted successfully!')
       navigate('/applications')
     } catch (error) {

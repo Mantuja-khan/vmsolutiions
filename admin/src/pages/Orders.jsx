@@ -40,7 +40,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('/api/admin/orders')
+      const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/orders')
       setOrders(response.data)
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -52,7 +52,7 @@ const Orders = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await axios.patch(`/api/admin/orders/${orderId}/status`, { status: newStatus })
+      await axios.patch(`https://vmsolutiions-backend.onrender.com/api/admin/orders/${orderId}/status`, { status: newStatus })
       toast.success('Order status updated successfully')
       fetchOrders()
       if (selectedOrder && selectedOrder._id === orderId) {

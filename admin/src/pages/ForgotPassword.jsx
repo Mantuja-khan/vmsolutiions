@@ -15,7 +15,7 @@ const ForgotPassword = () => {
     setLoading(true)
 
     try {
-      await axios.post('/api/auth/forgot-password', { email })
+      await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/forgot-password', { email })
       setEmailSent(true)
       toast.success('Password reset link sent to your email!')
     } catch (error) {

@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post('/api/admin/login', formData)
+      const response = await axios.post('https://vmsolutiions-backend.onrender.com/api/admin/login', formData)
       const { token, admin } = response.data
       login(token, admin)
     } catch (error) {

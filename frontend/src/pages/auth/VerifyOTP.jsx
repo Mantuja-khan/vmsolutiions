@@ -70,7 +70,7 @@ const VerifyOTP = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post('/api/auth/verify-otp', {
+      const response = await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/verify-otp', {
         userId,
         otp: otpString
       })
@@ -91,7 +91,7 @@ const VerifyOTP = () => {
     setResendLoading(true)
 
     try {
-      await axios.post('/api/auth/resend-otp', { userId })
+      await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/resend-otp', { userId })
       toast.success('OTP sent successfully!')
       setTimer(300) // Reset timer
       setOtp(['', '', '', '', '', '']) // Clear OTP inputs
