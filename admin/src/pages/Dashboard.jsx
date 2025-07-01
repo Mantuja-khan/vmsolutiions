@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get('/api/admin/dashboard')
+      const response = await axios.get('https://vmsolutiions-backend.onrender.com')
       const { stats, recentOrders, recentApplications } = response.data
       setStats(stats)
       setRecentOrders(recentOrders)
