@@ -46,7 +46,7 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('/api/admin/applications')
+      const response = await axios.get('https://vmsolutiions-backend.onrender.com')
       setApplications(response.data)
     } catch (error) {
       console.error('Error fetching applications:', error)
@@ -58,7 +58,7 @@ const Applications = () => {
 
   const handleStatusUpdate = async (applicationId, newStatus, notes = '') => {
     try {
-      await axios.patch(`/api/admin/applications/${applicationId}/status`, { 
+      await axios.patch(`https://vmsolutiions-backend.onrender.com/${applicationId}/status`, { 
         status: newStatus,
         adminNotes: notes
       })
