@@ -5,6 +5,9 @@ import Order from '../models/Order.js';
 import Application from '../models/Application.js';
 import User from '../models/User.js';
 import { adminMiddleware } from '../middleware/auth.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const router = express.Router();
 
@@ -20,7 +23,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { email, role: 'admin' },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '10y' }
     );
 
     res.json({
@@ -41,18 +44,21 @@ router.get('/dashboard', adminMiddleware, async (req, res) => {
       Product.countDocuments(),
       Order.countDocuments(),
       Application.countDocuments(),
-      User.countDocuments({ role: 'user' })
+      User.countDocuments({ role: { $ne: 'admin' } })
     ]);
 
     const recentOrders = await Order.find()
-      .populate('user items.product')
+      .populate('user', 'name email')
+      .populate('items.product', 'name images')
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(5)
+      .lean();
 
     const recentApplications = await Application.find()
-      .populate('user')
+      .populate('user', 'name email')
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(5)
+      .lean();
 
     res.json({
       stats: {
@@ -61,29 +67,48 @@ router.get('/dashboard', adminMiddleware, async (req, res) => {
         totalApplications,
         totalUsers
       },
-      recentOrders,
-      recentApplications
+      recentOrders: recentOrders || [],
+      recentApplications: recentApplications || []
     });
   } catch (error) {
     console.error('Dashboard stats error:', error);
-    res.status(500).json({ message: 'Error fetching dashboard data' });
+    res.status(500).json({ 
+      message: 'Error fetching dashboard data',
+      stats: {
+        totalProducts: 0,
+        totalOrders: 0,
+        totalApplications: 0,
+        totalUsers: 0
+      },
+      recentOrders: [],
+      recentApplications: []
+    });
   }
 });
 
 // Product management
 router.get('/products', adminMiddleware, async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
+    const products = await Product.find().sort({ createdAt: -1 }).lean();
+    res.json(products || []);
   } catch (error) {
     console.error('Get admin products error:', error);
-    res.status(500).json({ message: 'Error fetching products' });
+    res.status(500).json({ message: 'Error fetching products', data: [] });
   }
 });
 
 router.post('/products', adminMiddleware, async (req, res) => {
   try {
-    const product = new Product(req.body);
+    const productData = {
+      ...req.body,
+      isActive: true,
+      ratings: {
+        average: 0,
+        count: 0
+      }
+    };
+
+    const product = new Product(productData);
     await product.save();
     res.status(201).json(product);
   } catch (error) {
@@ -97,7 +122,7 @@ router.put('/products/:id', adminMiddleware, async (req, res) => {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
     
     if (!product) {
@@ -137,7 +162,7 @@ router.patch('/products/:id/offer', adminMiddleware, async (req, res) => {
         hasOffer,
         offerDetails: hasOffer ? offerDetails : null
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
     
     if (!product) {
@@ -155,13 +180,15 @@ router.patch('/products/:id/offer', adminMiddleware, async (req, res) => {
 router.get('/orders', adminMiddleware, async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate('user items.product')
-      .sort({ createdAt: -1 });
+      .populate('user', 'name email phone')
+      .populate('items.product', 'name images price')
+      .sort({ createdAt: -1 })
+      .lean();
     
-    res.json(orders);
+    res.json(orders || []);
   } catch (error) {
     console.error('Get admin orders error:', error);
-    res.status(500).json({ message: 'Error fetching orders' });
+    res.status(500).json({ message: 'Error fetching orders', data: [] });
   }
 });
 
@@ -172,8 +199,8 @@ router.patch('/orders/:id/status', adminMiddleware, async (req, res) => {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true }
-    ).populate('user items.product');
+      { new: true, runValidators: true }
+    ).populate('user', 'name email phone').populate('items.product', 'name images price');
     
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
@@ -190,13 +217,14 @@ router.patch('/orders/:id/status', adminMiddleware, async (req, res) => {
 router.get('/applications', adminMiddleware, async (req, res) => {
   try {
     const applications = await Application.find()
-      .populate('user')
-      .sort({ createdAt: -1 });
+      .populate('user', 'name email phone')
+      .sort({ createdAt: -1 })
+      .lean();
     
-    res.json(applications);
+    res.json(applications || []);
   } catch (error) {
     console.error('Get admin applications error:', error);
-    res.status(500).json({ message: 'Error fetching applications' });
+    res.status(500).json({ message: 'Error fetching applications', data: [] });
   }
 });
 
@@ -207,8 +235,8 @@ router.patch('/applications/:id/status', adminMiddleware, async (req, res) => {
     const application = await Application.findByIdAndUpdate(
       req.params.id,
       { status, adminNotes },
-      { new: true }
-    ).populate('user');
+      { new: true, runValidators: true }
+    ).populate('user', 'name email phone');
     
     if (!application) {
       return res.status(404).json({ message: 'Application not found' });
@@ -218,6 +246,21 @@ router.patch('/applications/:id/status', adminMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Update application status error:', error);
     res.status(500).json({ message: 'Error updating application status' });
+  }
+});
+
+// User management
+router.get('/users', adminMiddleware, async (req, res) => {
+  try {
+    const users = await User.find({ role: { $ne: 'admin' } })
+      .select('-password')
+      .sort({ createdAt: -1 })
+      .lean();
+    
+    res.json(users || []);
+  } catch (error) {
+    console.error('Get admin users error:', error);
+    res.status(500).json({ message: 'Error fetching users', data: [] });
   }
 });
 

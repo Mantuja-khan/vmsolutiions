@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [recentOrders, setRecentOrders] = useState([])
   const [recentApplications, setRecentApplications] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchDashboardData()
@@ -38,13 +39,33 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/dashboard')
       const { stats, recentOrders, recentApplications } = response.data
-      setStats(stats)
-      setRecentOrders(recentOrders)
-      setRecentApplications(recentApplications)
+      
+      setStats(stats || {
+        totalProducts: 0,
+        totalOrders: 0,
+        totalApplications: 0,
+        totalUsers: 0
+      })
+      setRecentOrders(recentOrders || [])
+      setRecentApplications(recentApplications || [])
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
+      setError('Failed to load dashboard data')
+      
+      // Set default values on error
+      setStats({
+        totalProducts: 0,
+        totalOrders: 0,
+        totalApplications: 0,
+        totalUsers: 0
+      })
+      setRecentOrders([])
+      setRecentApplications([])
     } finally {
       setLoading(false)
     }
@@ -100,7 +121,7 @@ const Dashboard = () => {
 
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusStyles[status] || 'bg-gray-100 text-gray-800'}`}>
-        {status.replace('_', ' ').toUpperCase()}
+        {status ? status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
       </span>
     )
   }
@@ -109,6 +130,22 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">⚠️ {error}</div>
+          <button 
+            onClick={fetchDashboardData}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
@@ -137,7 +174,7 @@ const Dashboard = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-2xl font-bold text-gray-900">{stat.value || 0}</p>
               </div>
             </div>
             <div className="mt-4 flex items-center text-green-600">
@@ -205,22 +242,22 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="divide-y divide-gray-100">
-            {recentOrders.length > 0 ? (
+            {recentOrders && recentOrders.length > 0 ? (
               recentOrders.map((order) => (
                 <div key={order._id} className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        Order #{order._id.slice(-6)}
+                        Order #{order._id ? order._id.slice(-6) : 'N/A'}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {order.user?.name} • ₹{order.totalAmount?.toLocaleString()}
+                        {order.user?.name || 'Unknown User'} • ₹{order.totalAmount?.toLocaleString() || '0'}
                       </p>
                     </div>
                     <div className="text-right">
                       {getStatusBadge(order.status)}
                       <p className="text-xs text-gray-500 mt-1">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Unknown Date'}
                       </p>
                     </div>
                   </div>
@@ -246,22 +283,22 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="divide-y divide-gray-100">
-            {recentApplications.length > 0 ? (
+            {recentApplications && recentApplications.length > 0 ? (
               recentApplications.map((application) => (
                 <div key={application._id} className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        {application.type} - {application.subType}
+                        {application.type || 'Unknown'} - {application.subType || 'Unknown'}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {application.user?.name}
+                        {application.user?.name || 'Unknown User'}
                       </p>
                     </div>
                     <div className="text-right">
                       {getStatusBadge(application.status)}
                       <p className="text-xs text-gray-500 mt-1">
-                        {new Date(application.createdAt).toLocaleDateString()}
+                        {application.createdAt ? new Date(application.createdAt).toLocaleDateString() : 'Unknown Date'}
                       </p>
                     </div>
                   </div>

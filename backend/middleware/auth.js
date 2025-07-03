@@ -28,6 +28,7 @@ export const adminMiddleware = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
+    // Check if user is admin by role or email
     if (decoded.role !== 'admin' && decoded.email !== process.env.ADMIN_EMAIL) {
       return res.status(403).json({ message: 'Admin access required' });
     }

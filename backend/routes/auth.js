@@ -4,6 +4,9 @@ import { body, validationResult } from 'express-validator';
 import User from '../models/User.js';
 import { sendOTP, sendPasswordResetEmail } from '../utils/emailService.js';
 import { generateOTP } from '../utils/helpers.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const router = express.Router();
 

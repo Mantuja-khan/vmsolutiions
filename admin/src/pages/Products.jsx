@@ -18,6 +18,7 @@ import {
 const Products = () => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showModal, setShowModal] = useState(false)
@@ -57,10 +58,15 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/products')
-      setProducts(response.data)
+      setProducts(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching products:', error)
+      setError('Failed to fetch products')
+      setProducts([])
       toast.error('Failed to fetch products')
     } finally {
       setLoading(false)
@@ -173,14 +179,14 @@ const Products = () => {
   const handleEdit = (product) => {
     setEditingProduct(product)
     setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price.toString(),
+      name: product.name || '',
+      description: product.description || '',
+      price: product.price?.toString() || '',
       originalPrice: product.originalPrice?.toString() || '',
-      category: product.category,
-      images: product.images.length > 0 ? product.images : [''],
+      category: product.category || 'laptop',
+      images: product.images && product.images.length > 0 ? product.images : [''],
       specifications: product.specifications || {},
-      stock: product.stock.toString(),
+      stock: product.stock?.toString() || '',
       brand: product.brand || '',
       model: product.model || '',
       warranty: product.warranty || '',
@@ -230,8 +236,8 @@ const Products = () => {
   }
 
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.description?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
     return matchesSearch && matchesCategory
   })
@@ -240,6 +246,22 @@ const Products = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">⚠️ {error}</div>
+          <button 
+            onClick={fetchProducts}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
@@ -303,7 +325,7 @@ const Products = () => {
           <div key={product._id} className="card overflow-hidden">
             <div className="relative">
               <img
-                src={product.images[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
+                src={product.images?.[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
                 alt={product.name}
                 className="w-full h-48 object-cover"
               />
@@ -348,11 +370,11 @@ const Products = () => {
                 <div className="flex items-center space-x-2">
                   {product.originalPrice && (
                     <span className="text-gray-400 line-through text-sm">
-                      ₹{product.originalPrice.toLocaleString()}
+                      ₹{product.originalPrice?.toLocaleString()}
                     </span>
                   )}
                   <span className="text-xl font-bold text-primary-600">
-                    ₹{product.price.toLocaleString()}
+                    ₹{product.price?.toLocaleString()}
                   </span>
                 </div>
                 <span className="text-sm text-gray-500 capitalize">
@@ -361,7 +383,7 @@ const Products = () => {
               </div>
               
               <div className="flex items-center justify-between text-sm text-gray-600">
-                <span>Stock: {product.stock}</span>
+                <span>Stock: {product.stock || 0}</span>
                 {product.brand && <span>Brand: {product.brand}</span>}
               </div>
             </div>

@@ -19,6 +19,7 @@ import {
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedOrder, setSelectedOrder] = useState(null)
@@ -40,10 +41,15 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/orders')
-      setOrders(response.data)
+      setOrders(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching orders:', error)
+      setError('Failed to fetch orders')
+      setOrders([])
       toast.error('Failed to fetch orders')
     } finally {
       setLoading(false)
@@ -103,7 +109,7 @@ const Orders = () => {
   }
 
   const filteredOrders = orders.filter(order => {
-    const matchesSearch = order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = order._id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus
@@ -114,6 +120,22 @@ const Orders = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">⚠️ {error}</div>
+          <button 
+            onClick={fetchOrders}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
@@ -196,10 +218,10 @@ const Orders = () => {
                       <Package className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          #{order._id.slice(-8)}
+                          #{order._id ? order._id.slice(-8) : 'N/A'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {order.items?.length} item{order.items?.length !== 1 ? 's' : ''}
+                          {order.items?.length || 0} item{(order.items?.length || 0) !== 1 ? 's' : ''}
                         </div>
                       </div>
                     </div>
@@ -209,10 +231,10 @@ const Orders = () => {
                       <User className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          {order.user?.name}
+                          {order.user?.name || 'Unknown User'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {order.user?.email}
+                          {order.user?.email || 'No email'}
                         </div>
                       </div>
                     </div>
@@ -221,7 +243,7 @@ const Orders = () => {
                     <div className="flex items-center">
                       <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                       <div className="text-sm text-gray-900">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Unknown Date'}
                       </div>
                     </div>
                   </td>
@@ -229,7 +251,7 @@ const Orders = () => {
                     <div className="flex items-center">
                       <CreditCard className="w-5 h-5 text-gray-400 mr-3" />
                       <div className="text-sm font-medium text-gray-900">
-                        ₹{order.totalAmount?.toLocaleString()}
+                        ₹{order.totalAmount?.toLocaleString() || '0'}
                       </div>
                     </div>
                   </td>
@@ -237,7 +259,7 @@ const Orders = () => {
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(order.status)}
                       <select
-                        value={order.status}
+                        value={order.status || 'pending'}
                         onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
                         className={`text-sm font-medium rounded-full px-3 py-1 border-0 focus:ring-2 focus:ring-primary-500 ${getStatusColor(order.status)}`}
                       >
@@ -283,7 +305,7 @@ const Orders = () => {
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Order Details - #{selectedOrder._id.slice(-8)}
+                  Order Details - #{selectedOrder._id ? selectedOrder._id.slice(-8) : 'N/A'}
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}
@@ -303,9 +325,9 @@ const Orders = () => {
                     Customer Information
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Name:</span> {selectedOrder.user?.name}</div>
-                    <div><span className="font-medium">Email:</span> {selectedOrder.user?.email}</div>
-                    <div><span className="font-medium">Phone:</span> {selectedOrder.user?.phone}</div>
+                    <div><span className="font-medium">Name:</span> {selectedOrder.user?.name || 'Unknown'}</div>
+                    <div><span className="font-medium">Email:</span> {selectedOrder.user?.email || 'No email'}</div>
+                    <div><span className="font-medium">Phone:</span> {selectedOrder.user?.phone || 'No phone'}</div>
                   </div>
                 </div>
 
@@ -315,14 +337,14 @@ const Orders = () => {
                     Order Information
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Order ID:</span> #{selectedOrder._id.slice(-8)}</div>
-                    <div><span className="font-medium">Date:</span> {new Date(selectedOrder.createdAt).toLocaleDateString()}</div>
+                    <div><span className="font-medium">Order ID:</span> #{selectedOrder._id ? selectedOrder._id.slice(-8) : 'N/A'}</div>
+                    <div><span className="font-medium">Date:</span> {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleDateString() : 'Unknown'}</div>
                     <div><span className="font-medium">Status:</span> 
                       <span className={`ml-2 px-2 py-1 rounded-full text-xs ${getStatusColor(selectedOrder.status)}`}>
-                        {selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}
+                        {selectedOrder.status ? selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1) : 'Unknown'}
                       </span>
                     </div>
-                    <div><span className="font-medium">Total:</span> ₹{selectedOrder.totalAmount?.toLocaleString()}</div>
+                    <div><span className="font-medium">Total:</span> ₹{selectedOrder.totalAmount?.toLocaleString() || '0'}</div>
                   </div>
                 </div>
               </div>
@@ -348,25 +370,29 @@ const Orders = () => {
               <div className="card p-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Order Items</h3>
                 <div className="space-y-4">
-                  {selectedOrder.items?.map((item, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                      <img
-                        src={item.product?.images?.[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
-                        alt={item.product?.name}
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{item.product?.name}</h4>
-                        <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                        <p className="text-sm text-gray-600">Price: ₹{item.price?.toLocaleString()}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium text-gray-900">
-                          ₹{(item.price * item.quantity)?.toLocaleString()}
+                  {selectedOrder.items && selectedOrder.items.length > 0 ? (
+                    selectedOrder.items.map((item, index) => (
+                      <div key={index} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                        <img
+                          src={item.product?.images?.[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
+                          alt={item.product?.name || 'Product'}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">{item.product?.name || 'Unknown Product'}</h4>
+                          <p className="text-sm text-gray-600">Quantity: {item.quantity || 0}</p>
+                          <p className="text-sm text-gray-600">Price: ₹{item.price?.toLocaleString() || '0'}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-medium text-gray-900">
+                            ₹{((item.price || 0) * (item.quantity || 0)).toLocaleString()}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No items found</p>
+                  )}
                 </div>
               </div>
 
@@ -378,14 +404,14 @@ const Orders = () => {
                     Payment Information
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div><span className="font-medium">Method:</span> {selectedOrder.paymentDetails.method}</div>
+                    <div><span className="font-medium">Method:</span> {selectedOrder.paymentDetails.method || 'Unknown'}</div>
                     <div><span className="font-medium">Status:</span> 
                       <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
                         selectedOrder.paymentDetails.status === 'completed' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {selectedOrder.paymentDetails.status}
+                        {selectedOrder.paymentDetails.status || 'Unknown'}
                       </span>
                     </div>
                     {selectedOrder.paymentDetails.paymentId && (
@@ -402,7 +428,7 @@ const Orders = () => {
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Update Order Status</h3>
                 <div className="flex items-center space-x-4">
                   <select
-                    value={selectedOrder.status}
+                    value={selectedOrder.status || 'pending'}
                     onChange={(e) => {
                       handleStatusUpdate(selectedOrder._id, e.target.value)
                     }}

@@ -43,11 +43,11 @@ const Home = () => {
   const fetchProducts = async () => {
     try {
       // Fetch all products
-      const allProductsResponse = await axios.get('/api/products?limit=8')
+      const allProductsResponse = await axios.get('https://vmsolutiions-backend.onrender.com/api/products?limit=8')
       setAllProducts(allProductsResponse.data.products || [])
 
       // Fetch featured products (products with offers)
-      const featuredResponse = await axios.get('/api/products/featured/list')
+      const featuredResponse = await axios.get('https://vmsolutiions-backend.onrender.com/api/products/featured/list')
       setFeaturedProducts(featuredResponse.data || [])
     } catch (error) {
       console.error('Error fetching products:', error)

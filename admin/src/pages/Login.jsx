@@ -26,12 +26,29 @@ const Login = () => {
     setLoading(true)
 
     try {
+      // Clear any existing tokens before login
+      localStorage.removeItem('adminToken')
+      localStorage.removeItem('adminData')
+      delete axios.defaults.headers.common['Authorization']
+
       const response = await axios.post('https://vmsolutiions-backend.onrender.com/api/admin/login', formData)
       const { token, admin } = response.data
+      
+      // Verify the token is properly formatted
+      if (!token || !admin) {
+        throw new Error('Invalid response from server')
+      }
+      
       login(token, admin)
     } catch (error) {
+      console.error('Login error:', error)
       const message = error.response?.data?.message || 'Login failed'
       toast.error(message)
+      
+      // Clear any potentially corrupted data
+      localStorage.removeItem('adminToken')
+      localStorage.removeItem('adminData')
+      delete axios.defaults.headers.common['Authorization']
     } finally {
       setLoading(false)
     }
@@ -125,6 +142,9 @@ const Login = () => {
             <p className="text-xs text-gray-500">
               Protected admin area. Authorized personnel only.
             </p>
+            <div className="mt-2 text-xs text-gray-400">
+              Default credentials: mantujakhan79@gmail.com / admin123
+            </div>
           </div>
         </div>
       </div>

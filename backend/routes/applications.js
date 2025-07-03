@@ -2,6 +2,9 @@ import express from 'express';
 import Application from '../models/Application.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { body, validationResult } from 'express-validator';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const router = express.Router();
 

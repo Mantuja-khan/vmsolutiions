@@ -19,6 +19,7 @@ import {
 const Applications = () => {
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -46,10 +47,15 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/admin/applications')
-      setApplications(response.data)
+      setApplications(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching applications:', error)
+      setError('Failed to fetch applications')
+      setApplications([])
       toast.error('Failed to fetch applications')
     } finally {
       setLoading(false)
@@ -58,7 +64,7 @@ const Applications = () => {
 
   const handleStatusUpdate = async (applicationId, newStatus, notes = '') => {
     try {
-      await axios.patch(`https://vmsolutiions-backend.onrender.com/api/admin/applications/${applicationId}/status`, { 
+      await axios.patch(`/api/admin/applications/${applicationId}/status`, { 
         status: newStatus,
         adminNotes: notes
       })
@@ -119,7 +125,7 @@ const Applications = () => {
   }
 
   const filteredApplications = applications.filter(application => {
-    const matchesSearch = application._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = application._id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          application.personalInfo?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          application.personalInfo?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          application.subType?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -132,6 +138,22 @@ const Applications = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">⚠️ {error}</div>
+          <button 
+            onClick={fetchApplications}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
@@ -227,10 +249,10 @@ const Applications = () => {
                       <FileText className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          #{application._id.slice(-8)}
+                          #{application._id ? application._id.slice(-8) : 'N/A'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {application.subType}
+                          {application.subType || 'Unknown'}
                         </div>
                       </div>
                     </div>
@@ -240,10 +262,10 @@ const Applications = () => {
                       <User className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          {application.personalInfo?.fullName}
+                          {application.personalInfo?.fullName || 'Unknown'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {application.personalInfo?.email}
+                          {application.personalInfo?.email || 'No email'}
                         </div>
                       </div>
                     </div>
@@ -252,7 +274,7 @@ const Applications = () => {
                     <div className="flex items-center">
                       {getTypeIcon(application.type)}
                       <span className="ml-2 text-sm font-medium text-gray-900 capitalize">
-                        {application.type}
+                        {application.type || 'Unknown'}
                       </span>
                     </div>
                   </td>
@@ -260,7 +282,7 @@ const Applications = () => {
                     <div className="flex items-center">
                       <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                       <div className="text-sm text-gray-900">
-                        {new Date(application.createdAt).toLocaleDateString()}
+                        {application.createdAt ? new Date(application.createdAt).toLocaleDateString() : 'Unknown'}
                       </div>
                     </div>
                   </td>
@@ -268,7 +290,7 @@ const Applications = () => {
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(application.status)}
                       <select
-                        value={application.status}
+                        value={application.status || 'pending'}
                         onChange={(e) => handleStatusUpdate(application._id, e.target.value)}
                         className={`text-sm font-medium rounded-full px-3 py-1 border-0 focus:ring-2 focus:ring-primary-500 ${getStatusColor(application.status)}`}
                       >
@@ -315,7 +337,7 @@ const Applications = () => {
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Application Details - #{selectedApplication._id.slice(-8)}
+                  Application Details - #{selectedApplication._id ? selectedApplication._id.slice(-8) : 'N/A'}
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}
@@ -335,12 +357,12 @@ const Applications = () => {
                     <span className="ml-2">Application Information</span>
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Type:</span> {selectedApplication.type} - {selectedApplication.subType}</div>
-                    <div><span className="font-medium">Application ID:</span> #{selectedApplication._id.slice(-8)}</div>
-                    <div><span className="font-medium">Date:</span> {new Date(selectedApplication.createdAt).toLocaleDateString()}</div>
+                    <div><span className="font-medium">Type:</span> {selectedApplication.type || 'Unknown'} - {selectedApplication.subType || 'Unknown'}</div>
+                    <div><span className="font-medium">Application ID:</span> #{selectedApplication._id ? selectedApplication._id.slice(-8) : 'N/A'}</div>
+                    <div><span className="font-medium">Date:</span> {selectedApplication.createdAt ? new Date(selectedApplication.createdAt).toLocaleDateString() : 'Unknown'}</div>
                     <div><span className="font-medium">Status:</span> 
                       <span className={`ml-2 px-2 py-1 rounded-full text-xs ${getStatusColor(selectedApplication.status)}`}>
-                        {selectedApplication.status.replace('_', ' ').charAt(0).toUpperCase() + selectedApplication.status.replace('_', ' ').slice(1)}
+                        {selectedApplication.status ? selectedApplication.status.replace('_', ' ').charAt(0).toUpperCase() + selectedApplication.status.replace('_', ' ').slice(1) : 'Unknown'}
                       </span>
                     </div>
                   </div>
@@ -352,12 +374,12 @@ const Applications = () => {
                     Personal Information
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Name:</span> {selectedApplication.personalInfo?.fullName}</div>
-                    <div><span className="font-medium">Email:</span> {selectedApplication.personalInfo?.email}</div>
-                    <div><span className="font-medium">Phone:</span> {selectedApplication.personalInfo?.phone}</div>
+                    <div><span className="font-medium">Name:</span> {selectedApplication.personalInfo?.fullName || 'Unknown'}</div>
+                    <div><span className="font-medium">Email:</span> {selectedApplication.personalInfo?.email || 'No email'}</div>
+                    <div><span className="font-medium">Phone:</span> {selectedApplication.personalInfo?.phone || 'No phone'}</div>
                     <div><span className="font-medium">Date of Birth:</span> {selectedApplication.personalInfo?.dateOfBirth ? new Date(selectedApplication.personalInfo.dateOfBirth).toLocaleDateString() : 'N/A'}</div>
-                    <div><span className="font-medium">Gender:</span> {selectedApplication.personalInfo?.gender}</div>
-                    <div><span className="font-medium">Marital Status:</span> {selectedApplication.personalInfo?.maritalStatus}</div>
+                    <div><span className="font-medium">Gender:</span> {selectedApplication.personalInfo?.gender || 'N/A'}</div>
+                    <div><span className="font-medium">Marital Status:</span> {selectedApplication.personalInfo?.maritalStatus || 'N/A'}</div>
                   </div>
                 </div>
               </div>
@@ -379,12 +401,12 @@ const Applications = () => {
                 <div className="card p-4">
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Financial Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div><span className="font-medium">Monthly Income:</span> ₹{selectedApplication.financialInfo.monthlyIncome?.toLocaleString()}</div>
-                    <div><span className="font-medium">Employment Type:</span> {selectedApplication.financialInfo.employmentType}</div>
+                    <div><span className="font-medium">Monthly Income:</span> ₹{selectedApplication.financialInfo.monthlyIncome?.toLocaleString() || '0'}</div>
+                    <div><span className="font-medium">Employment Type:</span> {selectedApplication.financialInfo.employmentType || 'N/A'}</div>
                     <div><span className="font-medium">Company:</span> {selectedApplication.financialInfo.companyName || 'N/A'}</div>
-                    <div><span className="font-medium">Work Experience:</span> {selectedApplication.financialInfo.workExperience} years</div>
-                    <div><span className="font-medium">PAN Number:</span> {selectedApplication.financialInfo.panNumber}</div>
-                    <div><span className="font-medium">Aadhar Number:</span> {selectedApplication.financialInfo.aadharNumber}</div>
+                    <div><span className="font-medium">Work Experience:</span> {selectedApplication.financialInfo.workExperience || 0} years</div>
+                    <div><span className="font-medium">PAN Number:</span> {selectedApplication.financialInfo.panNumber || 'N/A'}</div>
+                    <div><span className="font-medium">Aadhar Number:</span> {selectedApplication.financialInfo.aadharNumber || 'N/A'}</div>
                   </div>
                 </div>
               )}
@@ -398,7 +420,7 @@ const Applications = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     {Object.entries(selectedApplication.specificDetails).map(([key, value]) => (
                       <div key={key}>
-                        <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span> {value}
+                        <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span> {value || 'N/A'}
                       </div>
                     ))}
                   </div>
@@ -422,7 +444,7 @@ const Applications = () => {
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Update Application Status</h3>
                 <div className="flex items-center space-x-4">
                   <select
-                    value={selectedApplication.status}
+                    value={selectedApplication.status || 'pending'}
                     onChange={(e) => {
                       handleStatusUpdate(selectedApplication._id, e.target.value, adminNotes)
                     }}

@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
