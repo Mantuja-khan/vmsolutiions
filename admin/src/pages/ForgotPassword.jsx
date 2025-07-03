@@ -13,6 +13,7 @@ const ForgotPassword = () => {
     e.preventDefault()
     setLoading(true)
 
+    
     try {
       await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/forgot-password', { email })
       setEmailSent(true)

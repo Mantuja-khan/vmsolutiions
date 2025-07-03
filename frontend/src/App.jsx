@@ -6,6 +6,7 @@ import { CartProvider } from './contexts/CartContext'
 // Components
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
+import PWAInstallPrompt from './components/PWAInstallPrompt'
 
 // Pages
 import Home from './pages/Home'
@@ -75,6 +76,7 @@ function App() {
               </Routes>
             </main>
             <Footer />
+            <PWAInstallPrompt />
           </div>
           <Toaster
             position="top-right"
