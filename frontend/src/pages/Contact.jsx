@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import {
-  MapPin,
-  Phone,
-  Mail,
+import { 
+  MapPin, 
+  Phone, 
+  Mail, 
   Clock,
   Send,
   MessageSquare,
@@ -11,6 +11,7 @@ import {
   Building
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import contact from "../../images/contact.jpg"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -57,7 +58,8 @@ const Contact = () => {
       title: 'Visit Our Office',
       details: [
         'Prerna Infotech',
-        'F-GF-70,71,Ground Floor,Capital Highstreet,Phool Bagh,Bhiwadi(Alwar)'
+        'Prerna Infotech, 70-71 Ground Floor',
+        'Capital High Street Phool Bagh, Bhiwadi, Alwar(Rajasthan) '
       ],
       color: 'from-blue-500 to-blue-600'
     },
@@ -67,7 +69,7 @@ const Contact = () => {
       details: [
         '+91 935-8853-990',
         'Available for Support',
-        'Mon-Sat: 9:00 AM - 7:00 PM'
+        'Mon-Sat: 10:00 AM - 6:00 PM'
       ],
       color: 'from-green-500 to-green-600'
     },
@@ -105,9 +107,13 @@ const Contact = () => {
     {
       name: 'Insurance & Loans',
       email: 'Manojj@prernainffotech.com',
-      phone: '+91 935-8853-990'
+      phone: '+91 99826-86232'
     },
-   
+    {
+      name: 'General Inquiry',
+      email: 'vishal@prernainffotech.com',
+      phone: '+91 935-8853-990'
+    }
   ]
 
   const faqs = [
@@ -131,24 +137,32 @@ const Contact = () => {
 
   return (
     <div className="pt-16">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary-600 to-secondary-600 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Get in Touch
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              We're here to help! Reach out to us for any questions, support, or business inquiries
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Hero Section with Background */}
+     <section className="relative py-12 md:py-16 overflow-hidden">
+  <div
+  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+  style={{
+    backgroundImage: `url('${contact}')`,
+  }}
+>
+    <div className="absolute inset-0 bg-gradient-to-r to-secondary-900/90"></div>
+  </div>
+  <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+      </h1>
+      <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-2xl mx-auto">
+        
+      </p>
+    </motion.div>
+  </div>
+</section>
+
+
       {/* Contact Info Cards */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -321,35 +335,35 @@ const Contact = () => {
               className="space-y-8"
             >
               {/* Map */}
-             <div className="card overflow-hidden rounded-lg shadow-lg">
-      <div className="h-[300px] w-full">
-        <iframe
+              <div className="card overflow-hidden">
+                <div className="h-100">
+                  <iframe
+                    src="https://www.google.com/maps/place/Vm+solutiions/@26.8763569,74.78614,8z/data=!4m10!1m2!2m1!1svm+solutions!3m6!1s0xac5e7c25239dca63:0x6877bc0877fb1edd!8m2!3d28.2117487!4d76.8611897!15sCgx2bSBzb2x1dGlvbnNaDiIMdm0gc29sdXRpb25zkgEQc29mdHdhcmVfY29tcGFueaoBRxABKhAiDHZtIHNvbHV0aW9ucygAMh8QASIbg5IeiNs4jLt48D9_kZz8Ae9-L-NKzJS_S7NjMhAQAiIMdm0gc29sdXRpb25z4AEA!16s%2Fg%2F11wfl47xxs?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="VM Solutiions Location"
+                  ></iframe>
+                </div>
+                <div className="p-4 bg-gray-50">
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="w-4 h-4 text-primary-600" />
+                    <span className="text-sm font-medium text-gray-900">
+                      Prerna Infotech, 123 Tech Street, Digital City, Mumbai 400001
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-          src="https://www.google.com/maps/place/Vm+solutiions/@28.2117487,76.8586148,17z/data=!3m1!4b1!4m6!3m5!1s0xac5e7c25239dca63:0x6877bc0877fb1edd!8m2!3d28.2117487!4d76.8611897!16s%2Fg%2F11wfl47xxs?entry=ttu"
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          title="VM Solutiions Location"
-        ></iframe>
-      </div>
-      <div className="p-4 bg-gray-50">
-        <div className="flex items-center space-x-2">
-          <MapPin className="w-4 h-4 text-blue-600" />
-          <span className="text-sm font-medium text-gray-900">
-            F-GF-70,71, Ground Floor, Capital Highstreet, Phool Bagh, Bhiwadi (Alwar)
-          </span>
-        </div>
-      </div>
-    </div>
               {/* Department Contacts */}
               <div className="card p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   Department Contacts
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-4">   
                   {departments.map((dept, index) => (
                     <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
                       <h4 className="font-medium text-gray-900 mb-2">{dept.name}</h4>
@@ -368,7 +382,7 @@ const Contact = () => {
                         </a>
                       </div>
                     </div>
-                  ))}
+                  ))} 
                 </div>
               </div>
             </motion.div>
@@ -406,38 +420,6 @@ const Contact = () => {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-primary-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-              Contact us today and let's discuss how we can help you achieve your technology goals
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="tel:+919358853990"
-                className="btn-primary bg-white text-primary-600 hover:bg-gray-100"
-              >
-                Call Now
-              </a>
-              <a
-                href="mailto:Manojj@prernainffotech.com"
-                className="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-              >
-                Email Us
-              </a>
-            </div>
-          </motion.div>
         </div>
       </section>
     </div>

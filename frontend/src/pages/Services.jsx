@@ -9,8 +9,10 @@ import {
   CheckCircle,
   Users,
   Award,
-  Clock
+  Clock,
+  Globe
 } from 'lucide-react'
+import service from "../../images/services.jpg"
 
 const Services = () => {
   const services = [
@@ -49,6 +51,15 @@ const Services = () => {
       link: '/services/digital-marketing',
       color: 'from-pink-500 to-violet-600',
       image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg'
+    },
+    {
+      icon: Globe,
+      title: 'Website Designing',
+      description: 'Custom website design and development to establish your strong online presence',
+      features: ['Responsive Design', 'E-commerce Solutions', 'CMS Integration', 'Custom Development'],
+      link: '/services/website-designing',
+      color: 'from-cyan-500 to-blue-600',
+      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'
     }
   ]
 
@@ -88,57 +99,28 @@ const Services = () => {
 
   return (
     <div className="pt-16">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary-600 to-secondary-600 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Professional Tech Services
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Comprehensive technology solutions tailored to meet your business and personal needs
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/products" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
-                View Products
-              </Link>
-              <a href="#services" className="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
-                Explore Services
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Hero Section with Background */}
+      <section className="relative py-20 overflow-hidden">
+              <div
+               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+               style={{
+                 backgroundImage: `url('${service}')`,
+               }}
+             >
+                <div className="absolute inset-0 bg-gradient-to-r  to-secondary-900/90"></div>
+              </div>
+              <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                
+                </motion.div>
+              </div>
+            </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 text-sm md:text-base">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+   
 
       {/* Services Section */}
       <section id="services" className="py-20 bg-gray-50">
@@ -209,7 +191,7 @@ const Services = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Vm solutiions?
+              Why Choose VM Solutiions?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               We're committed to delivering exceptional service and building long-term relationships with our clients
@@ -237,38 +219,6 @@ const Services = () => {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-              Contact us today to discuss your requirements and get a customized solution for your business
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contact"
-                className="btn-primary bg-white text-primary-600 hover:bg-gray-100"
-              >
-                Get Quote
-              </Link>
-              <Link
-                to="/products"
-                className="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-              >
-                View Products
-              </Link>
-            </div>
-          </motion.div>
         </div>
       </section>
     </div>

@@ -144,34 +144,7 @@ const GoogleWorkspace = () => {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <Cloud className="w-10 h-10 text-blue-600" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Google Workspace Setup
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Professional email, cloud storage, and collaboration tools for your business
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary bg-white text-blue-600 hover:bg-gray-100">
-                Get Started
-              </button>
-              <button className="btn-outline border-white text-white hover:bg-white hover:text-blue-600">
-                View Plans
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+     
 
       {/* Services Section */}
       <section className="py-20 bg-white">

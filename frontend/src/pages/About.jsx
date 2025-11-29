@@ -10,11 +10,14 @@ import {
   Mail,
   Phone
 } from 'lucide-react'
+import manoj_sir from "../../images/manojsir.jpg"
+import vishal from "../../images/vishalbhaiya.jpg"
+import about from "../../images/about.jpg"
 
 const About = () => {
   const stats = [
-    { number: '10+', label: 'Years Experience' },
-    { number: '10000+', label: 'Happy Customers' },
+    { number: '5+', label: 'Years Experience' },
+    { number: '5000+', label: 'Happy Customers' },
     { number: '100+', label: 'Products & Services' },
     { number: '99%', label: 'Customer Satisfaction' }
   ]
@@ -39,80 +42,61 @@ const About = () => {
 
   const team = [
     {
-      name: 'Mr. Manoj Khambraa',
+      name: 'Mr. Manoj Khambra',
       position: 'Founder & CEO',
-      image: 'https://vmsolutiions.com/assets/manojsir-BuHEPvw3.jpg',
-      description: 'With over 14 years of experience in the technology industry, Rajesh founded Vm solutiions with a vision to make technology accessible to everyone.',
+      image: manoj_sir,
+      description: 'With over 15 years of experience in the technology industry, Rajesh founded VM Solutiions with a vision to make technology accessible to everyone.',
       expertise: ['Business Strategy', 'Technology Leadership', 'Customer Relations'],
       social: {
-        email: 'manojj@prernainffotech.com',
-        phone: '+91 998-2686-232'
+        email: 'Manojj@prernainffotech.com',
+        phone: '+91 9982686232'
       }
     },
     {
       name: 'Mr. Vishal Y Singh',
       position: 'Business Partner',
-      image: 'https://vmsolutiions.com/assets/vishalbhaiya-Byd1y08j.jpg',
-      description: 'Vishal Singh brings extensive technical expertise and innovation to Vm solutiions, ensuring we stay at the forefront of technology trends.',
+      image: vishal,
+      description: 'Vishal brings extensive technical expertise and innovation to VM Solutiions, ensuring we stay at the forefront of technology trends.',
       expertise: ['Technical Innovation', 'Product Development', 'Team Leadership'],
       social: {
-        email: 'Vishal@prernainfftech.com',
-        phone: '+91 935-8853-990'
+        email: 'vishal@prernainfitech.com',
+        phone: '+91 9358853990'
       }
     }
   ]
 
 
-
   const achievements = [
-    'Best Technology Service Provider 2023',
-    'Customer Choice Award 2022',
-    'Innovation Excellence Award 2021',
-    'Top Rated Business Partner 2020'
+    // 'Best Technology Service Provider 2023',
+    // 'Customer Choice Award 2022',
+    // 'Innovation Excellence Award 2021',
+    // 'Top Rated Business Partner 2020'
   ]
 
   return (
     <div className="pt-16">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary-600 to-secondary-600 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
+      {/* Hero Section with Background */}
+      <section className="relative py-20 overflow-hidden">
+        <div
+         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+         style={{
+           backgroundImage: `url('${about}')`,
+         }}
+       >
+          <div className="absolute inset-0 bg-gradient-to-r  to-secondary-900/90"></div>
+        </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              About VM Solutiions
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Your trusted technology partner since 2019, committed to delivering excellence in every solution we provide
-            </p>
+          
           </motion.div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       {/* Our Story Section */}
       <section className="py-20 bg-gray-50">
@@ -127,7 +111,7 @@ const About = () => {
                 Our Story
               </h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Vm solutiions was born from a simple yet powerful vision: to make technology accessible, 
+                VM Solutiions was born from a simple yet powerful vision: to make technology accessible, 
                 reliable, and beneficial for everyone. Founded in 2019 by technology enthusiasts 
                 Rajesh Kumar and Priya Sharma, we started as a small laptop service center and have 
                 grown into a comprehensive technology solutions provider.
@@ -155,11 +139,32 @@ const About = () => {
             >
               <img
                 src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg"
-                alt="Vm solutiions Office"
+                alt="VM Solutiions Office"
                 className="rounded-lg shadow-lg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+       {/* Stats Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-gray-600">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -208,7 +213,7 @@ const About = () => {
               Meet Our Leadership Team
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              The visionaries behind Vm solutiions, dedicated to driving innovation and excellence
+              The visionaries behind VM Solutiions, dedicated to driving innovation and excellence
             </p>
           </div>
 
@@ -239,44 +244,49 @@ const About = () => {
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   {member.description}
                 </p>
+                
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">Expertise:</h4>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {member.expertise.map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-center space-x-4">
+                  <a
+                    href={member.social.linkedin}
+                    className="p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={`mailto:${member.social.email}`}
+                    className="p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    <Mail className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={`tel:${member.social.phone}`}
+                    className="p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    <Phone className="w-5 h-5" />
+                  </a>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-  
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Join Our Success Story
-            </h2>
-            <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-              Become part of our growing family of satisfied customers and experience the Vm solutiions difference
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/contact"
-                className="btn-primary bg-white text-primary-600 hover:bg-gray-100"
-              >
-                Get in Touch
-              </a>
-              <a
-                href="/products"
-                className="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-              >
-                Explore Products
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+
+     
     </div>
   )
 }

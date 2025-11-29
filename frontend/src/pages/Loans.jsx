@@ -163,32 +163,7 @@ const Loans = () => {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-green-600 to-blue-700 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <CreditCard className="w-10 h-10 text-green-600" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Loan Solutions
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Flexible loan options to meet all your financial needs with competitive rates and quick approval
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary bg-white text-green-600 hover:bg-gray-100">
-                Apply Now
-              </button>
-              
-            </div>
-          </motion.div>
-        </div>
-      </section>
+     
 
       {/* Loan Cards */}
       <section className="py-20 bg-white">
@@ -289,7 +264,7 @@ const Loans = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Vm solutiions for Loans?
+              Why Choose VM Solutiions for Loans?
             </h2>
             <p className="text-xl text-gray-600">
               Your trusted financial partner for all loan requirements
@@ -358,33 +333,7 @@ const Loans = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-green-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Apply for a Loan?
-            </h2>
-            <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-              Get instant loan approval with competitive rates and flexible terms
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-md mx-auto">
-              <div className="flex items-center justify-center space-x-3">
-                <Phone className="w-6 h-6 text-green-200" />
-                <span className="text-white">+91 998-2686-232</span>
-              </div>
-              <div className="flex items-center justify-center space-x-3">
-                <Mail className="w-6 h-6 text-green-200" />
-                <span className="text-white">manojj@prernainffotech.com</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+   
     </div>
   )
 }

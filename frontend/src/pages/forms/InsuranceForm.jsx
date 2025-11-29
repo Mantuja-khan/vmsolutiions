@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -11,7 +11,9 @@ import {
   Phone, 
   Calendar,
   MapPin,
-  CreditCard,
+  Heart,
+  Car,
+  Users,
   FileText,
   Save
 } from 'lucide-react'
@@ -31,10 +33,10 @@ const InsuranceForm = () => {
       gender: '',
       maritalStatus: '',
       address: {
-        street: '',
-        city: '',
-        state: '',
-        pincode: ''
+        street: user?.address?.street || '',
+        city: user?.address?.city || '',
+        state: user?.address?.state || '',
+        pincode: user?.address?.pincode || ''
       }
     },
     financialInfo: {
@@ -52,41 +54,43 @@ const InsuranceForm = () => {
     health: {
       title: 'Health Insurance',
       description: 'Comprehensive health coverage for you and your family',
-      icon: Shield,
+      icon: Heart,
       color: 'from-blue-500 to-blue-600',
       specificFields: [
-        { key: 'coverageAmount', label: 'Coverage Amount (₹)', type: 'number', required: true },
+        { key: 'coverageAmount', label: 'Coverage Amount (₹)', type: 'select', options: ['3,00,000', '5,00,000', '10,00,000', '15,00,000', '25,00,000', '50,00,000'], required: true },
         { key: 'familyMembers', label: 'Number of Family Members', type: 'number', required: true },
-        { key: 'medicalHistory', label: 'Medical History', type: 'textarea', required: false },
-        { key: 'existingConditions', label: 'Existing Medical Conditions', type: 'textarea', required: false }
+        { key: 'preExistingConditions', label: 'Pre-existing Medical Conditions', type: 'textarea', required: false },
+        { key: 'preferredHospitals', label: 'Preferred Hospitals', type: 'textarea', required: false },
+        { key: 'smokingHabits', label: 'Smoking/Drinking Habits', type: 'select', options: ['None', 'Occasional', 'Regular'], required: true }
       ]
     },
     vehicle: {
       title: 'Vehicle Insurance',
-      description: 'Protect your vehicle with comprehensive insurance coverage',
-      icon: Shield,
+      description: 'Comprehensive vehicle protection and third-party coverage',
+      icon: Car,
       color: 'from-green-500 to-green-600',
       specificFields: [
         { key: 'vehicleType', label: 'Vehicle Type', type: 'select', options: ['Car', 'Motorcycle', 'Commercial Vehicle'], required: true },
-        { key: 'vehicleMake', label: 'Vehicle Make', type: 'text', required: true },
+        { key: 'vehicleMake', label: 'Vehicle Make/Brand', type: 'text', required: true },
         { key: 'vehicleModel', label: 'Vehicle Model', type: 'text', required: true },
-        { key: 'registrationNumber', label: 'Registration Number', type: 'text', required: true },
         { key: 'manufacturingYear', label: 'Manufacturing Year', type: 'number', required: true },
-        { key: 'vehicleValue', label: 'Vehicle Value (₹)', type: 'number', required: true }
+        { key: 'registrationNumber', label: 'Registration Number', type: 'text', required: true },
+        { key: 'vehicleValue', label: 'Current Vehicle Value (₹)', type: 'number', required: true },
+        { key: 'coverageType', label: 'Coverage Type', type: 'select', options: ['Third Party', 'Comprehensive'], required: true }
       ]
     },
     life: {
       title: 'Life Insurance',
-      description: 'Secure your family\'s future with life insurance',
-      icon: Shield,
+      description: 'Secure your family\'s financial future with life insurance',
+      icon: Users,
       color: 'from-purple-500 to-purple-600',
       specificFields: [
-        { key: 'coverageAmount', label: 'Coverage Amount (₹)', type: 'number', required: true },
-        { key: 'policyTerm', label: 'Policy Term (Years)', type: 'number', required: true },
-        { key: 'beneficiaryName', label: 'Beneficiary Name', type: 'text', required: true },
-        { key: 'beneficiaryRelation', label: 'Beneficiary Relation', type: 'text', required: true },
-        { key: 'smokingHabits', label: 'Smoking Habits', type: 'select', options: ['Non-smoker', 'Occasional smoker', 'Regular smoker'], required: true },
-        { key: 'healthConditions', label: 'Health Conditions', type: 'textarea', required: false }
+        { key: 'coverageAmount', label: 'Coverage Amount (₹)', type: 'select', options: ['10,00,000', '25,00,000', '50,00,000', '1,00,00,000', '2,00,00,000'], required: true },
+        { key: 'policyTerm', label: 'Policy Term (Years)', type: 'select', options: ['10', '15', '20', '25', '30'], required: true },
+        { key: 'premiumPaymentTerm', label: 'Premium Payment Term (Years)', type: 'select', options: ['5', '10', '15', '20', 'Single Premium'], required: true },
+        { key: 'nominees', label: 'Nominee Details', type: 'textarea', required: true },
+        { key: 'medicalHistory', label: 'Medical History', type: 'textarea', required: false },
+        { key: 'lifestyle', label: 'Lifestyle Information', type: 'textarea', required: false }
       ]
     }
   }
@@ -99,8 +103,8 @@ const InsuranceForm = () => {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Invalid Insurance Type</h2>
           <p className="text-gray-600 mb-6">The insurance type you're looking for doesn't exist.</p>
-          <button onClick={() => navigate('/')} className="btn-primary">
-            Back to Home
+          <button onClick={() => navigate('/insurance')} className="btn-primary">
+            Back to Insurance
           </button>
         </div>
       </div>
@@ -157,7 +161,7 @@ const InsuranceForm = () => {
         ...formData
       }
 
-      await axios.post('https://vmsolutiions-backend.onrender.com/api/applications', applicationData)
+      await axios.post('/api/applications', applicationData)
       toast.success('Insurance application submitted successfully!')
       navigate('/applications')
     } catch (error) {
@@ -380,7 +384,7 @@ const InsuranceForm = () => {
             className="bg-white rounded-lg shadow-sm p-6"
           >
             <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-              <CreditCard className="w-5 h-5 mr-2" />
+              <FileText className="w-5 h-5 mr-2" />
               Financial Information
             </h2>
 
@@ -483,7 +487,7 @@ const InsuranceForm = () => {
             className="bg-white rounded-lg shadow-sm p-6"
           >
             <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-              <FileText className="w-5 h-5 mr-2" />
+              <currentInsurance.icon className="w-5 h-5 mr-2" />
               {currentInsurance.title} Details
             </h2>
 
@@ -502,7 +506,7 @@ const InsuranceForm = () => {
                     >
                       <option value="">Select {field.label}</option>
                       {field.options.map((option) => (
-                        <option key={option} value={option.toLowerCase().replace(' ', '_')}>
+                        <option key={option} value={option}>
                           {option}
                         </option>
                       ))}

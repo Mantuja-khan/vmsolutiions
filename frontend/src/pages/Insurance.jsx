@@ -98,34 +98,6 @@ const Insurance = () => {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-600 to-purple-700 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <Shield className="w-10 h-10 text-blue-600" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Insurance Solutions
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Protect what matters most with our comprehensive insurance plans designed for your peace of mind
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary bg-white text-blue-600 hover:bg-gray-100">
-                Get Free Quote
-              </button>
-              <button className="btn-outline border-white text-white hover:bg-white hover:text-blue-600">
-                Compare Plans
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Insurance Cards */}
       <section className="py-20 bg-white">
@@ -187,7 +159,7 @@ const Insurance = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Vm solutiions for Insurance?
+              Why Choose VM Solutiions for Insurance?
             </h2>
             <p className="text-xl text-gray-600">
               Your trusted partner for comprehensive insurance solutions
@@ -273,17 +245,17 @@ const Insurance = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-md mx-auto">
               <div className="flex items-center justify-center space-x-3">
                 <Phone className="w-6 h-6 text-blue-200" />
-                <span className="text-white">+91 998-2686-232</span>
+                <span className="text-white">+91 98765 43210</span>
               </div>
               <div className="flex items-center justify-center space-x-3">
                 <Mail className="w-6 h-6 text-blue-200" />
-                <span className="text-white">Manojj@prernainffotech.com</span>
+                <span className="text-white">insurance@vmsolutions.com</span>
               </div>
             </div>
             
-            {/* <button className="btn-primary bg-white text-blue-600 hover:bg-gray-100">
+            <button className="btn-primary bg-white text-blue-600 hover:bg-gray-100">
               Get Free Quote
-            </button> */}
+            </button>
           </motion.div>
         </div>
       </section>

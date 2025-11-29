@@ -10,6 +10,22 @@
   "scope": "/",
   "lang": "en",
   "categories": ["shopping", "business", "productivity"],
+  "screenshots": [
+    {
+      "src": "/icons/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "VM Solutions Desktop View"
+    },
+    {
+      "src": "/icons/screenshot-narrow.png", 
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "VM Solutions Mobile View"
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -59,5 +75,63 @@
       "type": "image/png",
       "purpose": "maskable any"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop Products",
+      "short_name": "Shop",
+      "description": "Browse our product catalog",
+      "url": "/products",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Our Services",
+      "short_name": "Services", 
+      "description": "Explore our tech services",
+      "url": "/services",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Insurance",
+      "short_name": "Insurance",
+      "description": "Get insurance quotes",
+      "url": "/insurance", 
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Loans",
+      "short_name": "Loans",
+      "description": "Apply for loans",
+      "url": "/loans",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png", 
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

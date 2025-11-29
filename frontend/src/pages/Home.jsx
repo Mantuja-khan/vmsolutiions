@@ -14,54 +14,38 @@ import {
   ArrowRight,
   Star,
   CheckCircle,
-  ChevronLeft,
-  ChevronRight,
   ShoppingCart,
   Eye
 } from 'lucide-react'
+
+// Import your image here - replace with your actual image path
+// import HeroImage from '../assets/images/your-hero-image.jpg'
+import hero_image from "../assets/home.png"
 
 const Home = () => {
   const { addToCart } = useCart()
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
     fetchProducts()
   }, [])
 
-  useEffect(() => {
-    if (featuredProducts.length > 0) {
-      const timer = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % Math.min(featuredProducts.length, 6))
-      }, 4000)
-      return () => clearInterval(timer)
-    }
-  }, [featuredProducts])
-
   const fetchProducts = async () => {
     try {
       // Fetch all products
-      const allProductsResponse = await axios.get('https://vmsolutiions-backend.onrender.com/api/products?limit=8')
+      const allProductsResponse = await axios.get('/api/products?limit=8')
       setAllProducts(allProductsResponse.data.products || [])
 
       // Fetch featured products (products with offers)
-      const featuredResponse = await axios.get('https://vmsolutiions-backend.onrender.com/api/products/featured/list')
+      const featuredResponse = await axios.get('/api/products/featured/list')
       setFeaturedProducts(featuredResponse.data || [])
     } catch (error) {
       console.error('Error fetching products:', error)
     } finally {
       setLoading(false)
     }
-  }
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % Math.min(featuredProducts.length, 6))
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + Math.min(featuredProducts.length, 6)) % Math.min(featuredProducts.length, 6))
   }
 
   const handleAddToCart = (product) => {
@@ -131,7 +115,7 @@ const Home = () => {
 
   return (
     <div className="pt-16 pb-20 md:pb-8">
-      {/* Hero Section with Product Carousel */}
+      {/* Hero Section with Custom Image */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600"></div>
         <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -178,95 +162,26 @@ const Home = () => {
               </div>
             </motion.div>
 
-            {/* Right Content - Product Carousel */}
+            {/* Right Content - Custom Image */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
-              {!loading && featuredProducts.length > 0 && (
-                <div className="relative w-full max-w-sm md:max-w-md mx-auto">
-                  <div className="relative h-80 md:h-96 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    
-                    {/* Product Carousel */}
-                    <div className="relative h-full">
-                      {featuredProducts.slice(0, 6).map((product, index) => (
-                        <motion.div
-                          key={product._id}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ 
-                            opacity: index === currentSlide ? 1 : 0,
-                            scale: index === currentSlide ? 1 : 0.8,
-                            zIndex: index === currentSlide ? 10 : 1
-                          }}
-                          transition={{ duration: 0.5 }}
-                          className="absolute inset-0 flex flex-col justify-center items-center p-4 md:p-6"
-                        >
-                          <div className="w-32 h-32 md:w-40 md:h-40 mb-4 md:mb-6 rounded-xl overflow-hidden shadow-2xl">
-                            <img
-                              src={product.images[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <h3 className="text-base md:text-lg font-bold text-white text-center mb-2 line-clamp-2">
-                            {product.name}
-                          </h3>
-                          <div className="flex items-center space-x-2 mb-4">
-                            {product.originalPrice && (
-                              <span className="text-gray-300 line-through text-xs md:text-sm">
-                                ₹{product.originalPrice.toLocaleString()}
-                              </span>
-                            )}
-                            <span className="text-lg md:text-xl font-bold text-yellow-400">
-                              ₹{product.price.toLocaleString()}
-                            </span>
-                          </div>
-                          <Link
-                            to={`/products/${product._id}`}
-                            className="btn-primary bg-white text-primary-600 hover:bg-gray-100 text-xs md:text-sm px-3 py-2"
-                          >
-                            View Details
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Navigation Buttons */}
-                    <button
-                      onClick={prevSlide}
-                      className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-1.5 md:p-2 transition-all duration-200"
-                    >
-                      <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-white" />
-                    </button>
-                    <button
-                      onClick={nextSlide}
-                      className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-1.5 md:p-2 transition-all duration-200"
-                    >
-                      <ChevronRight className="w-4 h-4 md:w-6 md:h-6 text-white" />
-                    </button>
-
-                    {/* Dots Indicator */}
-                    <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      {featuredProducts.slice(0, 6).map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentSlide(index)}
-                          className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                            index === currentSlide ? 'bg-white' : 'bg-white/50'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
+              className="relative">
+              <div className="relative w-full max-w-sm md:max-w-lg mx-auto">
+                {/* Hero Image Container */}
+                <div className="relative h-80 md:h-96  backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl">    
+                  <img
+                    src={hero_image} //Replace with {HeroImage} after importing
+                    alt="VM Solutiions- Your Tech Partner"
+                    className="w-full h-full object-cover"
+                  />    
                 </div>
-              )}
+                {/* Floating Elements */}    
+              </div>
             </motion.div>
-          </div>
+          </div> 
         </div>
-
         {/* Scroll Indicator */}
         <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="animate-bounce">
@@ -441,7 +356,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose VM Solutions?
+              Why Choose VM Solutiions?
             </h2>
             <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
               We provide comprehensive tech solutions backed by expertise and reliability
@@ -578,37 +493,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-base md:text-lg text-gray-100 mb-6 md:mb-8 max-w-2xl mx-auto">
-              Join thousands of satisfied customers and experience the VM Solutions difference
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-              <Link
-                to="/products"
-                className="btn-primary bg-white text-primary-600 hover:bg-gray-100 text-sm md:text-base px-4 md:px-6 py-2 md:py-3"
-              >
-                Start Shopping
-              </Link>
-              <Link
-                to="/register"
-                className="btn-outline border-white text-white hover:bg-white hover:text-primary-600 text-sm md:text-base px-4 md:px-6 py-2 md:py-3"
-              >
-                Create Account
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+
     </div>
   )
 }

@@ -38,6 +38,8 @@ import LaptopServices from './pages/services/LaptopServices'
 import CCTVInstallation from './pages/services/CCTVInstallation'
 import GoogleWorkspace from './pages/services/GoogleWorkspace'
 import DigitalMarketing from './pages/services/DigitalMarketing'
+import WebsiteDesigning from './pages/services/WebsiteDesigning'
+
 
 function App() {
   return (
@@ -60,6 +62,7 @@ function App() {
                 <Route path="/services/cctv-installation" element={<CCTVInstallation />} />
                 <Route path="/services/google-workspace" element={<GoogleWorkspace />} />
                 <Route path="/services/digital-marketing" element={<DigitalMarketing />} />
+                <Route path="/services/website-designing" element={<WebsiteDesigning />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/login" element={<Login />} />

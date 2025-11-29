@@ -65,11 +65,11 @@ const Header = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 md:space-x-3">
               <img
-                src={logo_1}
-                alt="Company Logo"
-                className="w-24 h-20 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain"
+  src={logo_1}
+  alt="Company Logo"
+  className="w-40 h-52 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain"
+/>
 
-              />
               {/* Optional fallback if image fails to load */}
               <div className="hidden w-12 h-12 md:w-16 md:h-16 bg-gray-200 rounded-lg items-center justify-center">
                 <span className="text-gray-600 font-bold text-sm md:text-xl">LOGO</span>
