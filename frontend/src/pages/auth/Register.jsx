@@ -42,7 +42,7 @@ const Register = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/register', {
+      const response = await axios.post('https://http://72.61.227.137:5000/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password,

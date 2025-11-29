@@ -32,7 +32,7 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`https://vmsolutiions-backend.onrender.com/api/products/${id}`)
+      const response = await axios.get(`https://http://72.61.227.137:5000/api/products/${id}`)
       setProduct(response.data)
     } catch (error) {
       console.error('Error fetching product:', error)

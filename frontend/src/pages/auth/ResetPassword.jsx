@@ -48,7 +48,7 @@ const ResetPassword = () => {
     setLoading(true)
 
     try {
-      await axios.post('https://vmsolutiions-backend.onrender.com/api/auth/reset-password', {
+      await axios.post('https://http://72.61.227.137:5000/api/auth/reset-password', {
         token,
         password: formData.password
       })

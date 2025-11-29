@@ -1,2 +1,3 @@
+git push origin main
 # Netlify redirects file (alternative to .htaccess for Netlify)
 /*    /index.html   200

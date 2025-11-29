@@ -134,7 +134,7 @@ const Checkout = () => {
       const totalAmount = Math.round(getCartTotal() * 1.18) // Including 18% tax
 
       // Create Razorpay order
-      const orderResponse = await axios.post('https://vmsolutiions-backend.onrender.com/api/payments/create-order', {
+      const orderResponse = await axios.post('https://http://72.61.227.137:5000/api/payments/create-order', {
         amount: totalAmount
       })
 
@@ -151,7 +151,7 @@ const Checkout = () => {
         handler: async (response) => {
           try {
             // Verify payment
-            const verifyResponse = await axios.post('https://vmsolutiions-backend.onrender.com/api/payments/verify-payment', {
+            const verifyResponse = await axios.post('https://http://72.61.227.137:5000/api/payments/verify-payment', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature
@@ -174,7 +174,7 @@ const Checkout = () => {
                 }
               }
 
-              const createOrderResponse = await axios.post('https://vmsolutiions-backend.onrender.com/api/orders', orderData)
+              const createOrderResponse = await axios.post('https://http://72.61.227.137:5000/api/orders', orderData)
               
               if (createOrderResponse.data) {
                 clearCart()

@@ -27,7 +27,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/orders/my-orders')
+      const response = await axios.get('https://http://72.61.227.137:5000/api/orders/my-orders')
       setOrders(response.data)
     } catch (error) {
       console.error('Error fetching orders:', error)

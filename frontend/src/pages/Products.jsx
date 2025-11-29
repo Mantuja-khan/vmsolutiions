@@ -39,7 +39,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('https://vmsolutiions-backend.onrender.com/api/products', {
+      const response = await axios.get('https://http://72.61.227.137:5000/api/products', {
         params: {
           search: searchTerm,
           category: selectedCategory,

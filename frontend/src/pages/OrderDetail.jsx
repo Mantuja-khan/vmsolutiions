@@ -32,7 +32,7 @@ const OrderDetail = () => {
 
   const fetchOrder = async () => {
     try {
-      const response = await axios.get(`https://vmsolutiions-backend.onrender.com/api/orders/${id}`)
+      const response = await axios.get(`https://http://72.61.227.137:5000/api/orders/${id}`)
       setOrder(response.data)
     } catch (error) {
       console.error('Error fetching order:', error)

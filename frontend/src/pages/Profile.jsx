@@ -69,7 +69,7 @@ const Profile = () => {
     try {
       setLoading(true)
       
-      const response = await axios.put('https://vmsolutiions-backend.onrender.com/api/auth/profile', {
+      const response = await axios.put('https://http://72.61.227.137:5000/api/auth/profile', {
         name: formData.name,
         phone: formData.phone,
         address: formData.address
