@@ -31,7 +31,7 @@ const Login = () => {
       localStorage.removeItem('adminData')
       delete axios.defaults.headers.common['Authorization']
 
-      const response = await axios.post('https://http://72.61.227.137:5000/api/admin/login', formData)
+      const response = await axios.post('http://localhost:5000/api/admin/login', formData)
       const { token, admin } = response.data
       
       // Verify the token is properly formatted

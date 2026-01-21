@@ -70,7 +70,7 @@ const VerifyOTP = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post('https://http://72.61.227.137:5000/api/auth/verify-otp', {
+      const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
         userId,
         otp: otpString
       })

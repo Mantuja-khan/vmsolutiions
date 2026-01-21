@@ -42,7 +42,7 @@ const Dashboard = () => {
       setLoading(true)
       setError(null)
       
-      const response = await axios.get('https://http://72.61.227.137:5000/api/admin/dashboard')
+      const response = await axios.get('http://localhost:5000/api/admin/dashboard')
       const { stats, recentOrders, recentApplications } = response.data
       
       setStats(stats || {

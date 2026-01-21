@@ -196,7 +196,7 @@ const LoanForm = () => {
         ...formData
       }
 
-      await axios.post('https://http://72.61.227.137:5000/api/applications', applicationData)
+      await axios.post('http://localhost:5000/api/applications', applicationData)
       toast.success('Loan application submitted successfully!')
       navigate('/applications')
     } catch (error) {

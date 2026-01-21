@@ -29,7 +29,7 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('https://http://72.61.227.137:5000/api/applications/my-applications')
+      const response = await axios.get('http://localhost:5000/api/applications/my-applications')
       setApplications(response.data)
     } catch (error) {
       console.error('Error fetching applications:', error)
