@@ -50,7 +50,7 @@ const Applications = () => {
       setLoading(true)
       setError(null)
       
-      const response = await axios.get('http://localhost:5000/api/admin/applications')
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/applications`)
       setApplications(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching applications:', error)

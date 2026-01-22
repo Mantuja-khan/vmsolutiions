@@ -32,7 +32,7 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/products/${id}`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/products/${id}`)
       setProduct(response.data)
     } catch (error) {
       console.error('Error fetching product:', error)

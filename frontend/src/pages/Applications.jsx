@@ -29,7 +29,7 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/applications/my-applications')
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/applications/my-applications`)
       setApplications(response.data)
     } catch (error) {
       console.error('Error fetching applications:', error)

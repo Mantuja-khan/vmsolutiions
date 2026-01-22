@@ -43,8 +43,8 @@ const Orders = () => {
     try {
       setLoading(true)
       setError(null)
-      
-      const response = await axios.get('http://localhost:5000/api/admin/orders')
+
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/orders`)
       setOrders(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -58,7 +58,7 @@ const Orders = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await axios.patch(`https://http://localhost:5000/api/admin/orders/${orderId}/status`, { status: newStatus })
+      await axios.patch(`https://${import.meta.env.VITE_API_URL}/admin/orders/${orderId}/status`, { status: newStatus })
       toast.success('Order status updated successfully')
       fetchOrders()
       if (selectedOrder && selectedOrder._id === orderId) {
