@@ -39,7 +39,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(`http://localhost:3000/products`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, {
         params: {
           search: searchTerm,
           category: selectedCategory,

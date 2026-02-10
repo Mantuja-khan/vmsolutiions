@@ -61,7 +61,7 @@ const Products = () => {
       setLoading(true)
       setError(null)
 
-      const response = await axios.get(`http://localhost:3000/admin/products`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/products`)
       setProducts(Array.isArray(response.data) ? response.data : [])
     } catch (error) {
       console.error('Error fetching products:', error)
@@ -158,10 +158,10 @@ const Products = () => {
       }
 
       if (editingProduct) {
-        await axios.put(`http://localhost:3000/admin/products/${editingProduct._id}`, productData)
+        await axios.put(`${import.meta.env.VITE_API_URL}/admin/products/${editingProduct._id}`, productData)
         toast.success('Product updated successfully')
       } else {
-        await axios.post(`http://localhost:3000/admin/products`, productData)
+        await axios.post(`${import.meta.env.VITE_API_URL}/admin/products`, productData)
         toast.success('Product created successfully')
       }
 
@@ -203,7 +203,7 @@ const Products = () => {
   const handleDelete = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`http://localhost:3000/admin/products/${productId}`)
+        await axios.delete(`${import.meta.env.VITE_API_URL}/admin/products/${productId}`)
         toast.success('Product deleted successfully')
         fetchProducts()
       } catch (error) {

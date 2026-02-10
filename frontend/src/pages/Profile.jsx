@@ -69,7 +69,7 @@ const Profile = () => {
     try {
       setLoading(true)
       
-      const response = await axios.put(`http://localhost:3000/auth/profile`, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/auth/profile`, {
         name: formData.name,
         phone: formData.phone,
         address: formData.address

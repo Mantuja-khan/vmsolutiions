@@ -32,7 +32,7 @@ const OrderDetail = () => {
 
   const fetchOrder = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/orders/${id}`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders/${id}`)
       setOrder(response.data)
     } catch (error) {
       console.error('Error fetching order:', error)

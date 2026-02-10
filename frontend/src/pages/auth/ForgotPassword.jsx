@@ -15,7 +15,7 @@ const ForgotPassword = () => {
     setLoading(true)
 
     try {
-      await axios.post(`http://localhost:3000/auth/forgot-password`, { email })
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email })
       setEmailSent(true)
       toast.success('Password reset link sent to your email!')
     } catch (error) {

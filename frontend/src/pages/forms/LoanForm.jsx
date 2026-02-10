@@ -196,7 +196,7 @@ const LoanForm = () => {
         ...formData
       }
 
-      await axios.post(`http://localhost:3000/applications`, applicationData)
+      await axios.post(`${import.meta.env.VITE_API_URL}/applications`, applicationData)
       toast.success('Loan application submitted successfully!')
       navigate('/applications')
     } catch (error) {
