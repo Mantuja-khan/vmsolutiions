@@ -39,7 +39,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, {
+      const response = await axios.get(`http://localhost:3000/products`, {
         params: {
           search: searchTerm,
           category: selectedCategory,
@@ -47,8 +47,8 @@ const Products = () => {
           limit: 12
         }
       })
-      setProducts(response.data.products)
-      setTotalPages(response.data.totalPages)
+setProducts(response.data.products || [])
+setTotalPages(response.data.totalPages || 1)
     } catch (error) {
       console.error('Error fetching products:', error)
     } finally {
@@ -214,7 +214,7 @@ const Products = () => {
               </div>
             ))}
           </div>
-        ) : products.length > 0 ? (
+) : Array.isArray(products) && products.length > 0 ? (
           <div className={`grid gap-3 sm:gap-4 md:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4' : 'grid-cols-1'}`}>
             {products.map((product, index) => (
               <ProductCard key={product._id} product={product} index={index} />

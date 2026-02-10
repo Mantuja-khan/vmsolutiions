@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
 import { useCart } from '../contexts/CartContext'
+import sukoh from "../assets/sukoh.png"
+import shree from "../assets/shree.png"
+import ds from "../assets/ds.png"
+import garv from "../assets/garventerprises.png"
+import blue from "../assets/bluesip.png"
+import niraaj from "../assets/niraaj.png"
 import { 
   ShoppingBag, 
   Shield, 
@@ -15,43 +21,122 @@ import {
   Star,
   CheckCircle,
   ShoppingCart,
-  Eye
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  Quote
 } from 'lucide-react'
 
-// Import your image here - replace with your actual image path
-// import HeroImage from '../assets/images/your-hero-image.jpg'
+// Import your images here - replace with your actual image paths
 import hero_image from "../assets/home.png"
+// import hero_image2 from "../assets/hero2.png"
+// import hero_image3 from "../assets/hero3.png"
+// import hero_image4 from "../assets/hero4.png"
 
 const Home = () => {
-  const { addToCart } = useCart()
-  const [featuredProducts, setFeaturedProducts] = useState([])
-  const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
-
-  const fetchProducts = async () => {
-    try {
-      // Fetch all products
-      const allProductsResponse = await axios.get('/api/products?limit=8')
-      setAllProducts(allProductsResponse.data.products || [])
-
-      // Fetch featured products (products with offers)
-      const featuredResponse = await axios.get('/api/products/featured/list')
-      setFeaturedProducts(featuredResponse.data || [])
-    } catch (error) {
-      console.error('Error fetching products:', error)
-    } finally {
-      setLoading(false)
+  // Hero Slides Data
+  const heroSlides = [
+    {
+      title: "Your Complete",
+      highlight: "Tech Partner",
+      description: "From premium laptops to comprehensive digital services, insurance, and loans - everything you need in one place.",
+      image: hero_image,
+      primaryBtn: { text: "Shop Products", link: "/products" },
+      secondaryBtn: { text: "Explore Services", link: "/services" }
+    },
+    {
+      title: "Premium",
+      highlight: "Laptop Solutions",
+      description: "Discover high-quality laptops from trusted brands with professional repair and maintenance services.",
+      image: hero_image, // Replace with hero_image2
+      primaryBtn: { text: "Browse Laptops", link: "/products" },
+      secondaryBtn: { text: "Repair Services", link: "/services/laptop-services" }
+    },
+    {
+      title: "Secure Your",
+      highlight: "Future Today",
+      description: "Comprehensive insurance and flexible loan solutions tailored to protect and empower your financial journey.",
+      image: hero_image, // Replace with hero_image3
+      primaryBtn: { text: "Get Insurance", link: "/insurance" },
+      secondaryBtn: { text: "Apply for Loan", link: "/loans" }
+    },
+    {
+      title: "Digital",
+      highlight: "Transformation",
+      description: "CCTV security, Google Workspace, and digital marketing services to elevate your business to the next level.",
+      image: hero_image, // Replace with hero_image4
+      primaryBtn: { text: "View Services", link: "/services" },
+      secondaryBtn: { text: "Contact Us", link: "/contact" }
     }
-  }
+  ]
 
-  const handleAddToCart = (product) => {
-    addToCart(product, 1)
+  // Testimonials Data
+const testimonials = [
+  {
+    name: "Blue Sip Team",
+    firm: "Blue Sip",
+    role: "Founder",
+    image: blue,
+    previewImage: blue,
+    rating: 5,
+    text: "VM Solutions delivered a clean and modern website that perfectly represents our brand identity.",
+    website: "https://bluesip.org.in/"
+  },
+  {
+    name: "Niraaj Packaging",
+    firm: "Niraaj Pack",
+    role: "Director",
+    image: "https://ui-avatars.com/api/?name=Niraaj+Packaging",
+    previewImage: niraaj,
+    rating: 5,
+    text: "Our company website was developed professionally with excellent performance and responsiveness.",
+    website: "https://niraajpack.com/"
+  },
+  {
+    name: "Garv Enterprises",
+    firm: "Garv Enterprises",
+    role: "Owner",
+    image: garv,
+    previewImage: garv,
+    rating: 5,
+    text: "The website built for our pneumatic tools business is fast, attractive, and easy to manage.",
+    website: "https://garventerprises.in/"
+  },
+  {
+    name: "DS Engineering",
+    firm: "DS Engineering Works",
+    role: "Managing Director",
+    image: ds,
+    previewImage: ds,
+    rating: 5,
+    text: "A professional engineering website with modern UI and great user experience.",
+    website: "https://www.dsengineeringworks.com/"
+  },
+  {
+    name: "Shree Enterprises Pvt. Ltd.",
+    firm: "Shree enterprises",
+    role: "Client",
+    image: shree,
+    previewImage: shree,
+    rating: 5,
+    text: "Website created by prerna infotech really push my business , ",
+    website: "https://shreeenterprises29.com/"
+  },
+  {
+    name: "Sukoh Technlogies pvt. ltd.",
+    firm: "Sukoh Technologies",
+    role: "Client",
+    image: sukoh,
+    previewImage: sukoh,
+    rating: 5,
+    text: "VM Solutiions provided really well designed website for our company and it really helped us to grow our business.",
+    website: "https://sukohtechnologies.com/"
   }
-
+];
   const services = [
     {
       icon: Laptop,
@@ -82,7 +167,6 @@ const Home = () => {
       color: 'from-pink-500 to-violet-600'
     }
   ]
-
   const features = [
     {
       icon: ShoppingBag,
@@ -105,7 +189,6 @@ const Home = () => {
       description: '24/7 technical support and customer service'
     }
   ]
-
   const stats = [
     { number: '5000+', label: 'Happy Customers' },
     { number: '100+', label: 'Products Available' },
@@ -113,9 +196,37 @@ const Home = () => {
     { number: '99%', label: 'Customer Satisfaction' }
   ]
 
+  // Auto-slide for hero
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(timer)
+  }, [])
+
+  // Auto-slide for testimonials
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 4000) // Change testimonial every 4 seconds
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
+  }
+
+ 
+
   return (
     <div className="pt-16 pb-20 md:pb-8">
-      {/* Hero Section with Custom Image */}
+      {/* Hero Section with Slider */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600"></div>
         <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -127,61 +238,86 @@ const Home = () => {
           <div className="absolute bottom-1/4 left-1/3 w-32 h-32 md:w-64 md:h-64 bg-white rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center lg:text-left"
+              key={currentSlide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
             >
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6">
-                Your Complete
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-                  Tech Partner
-                </span>
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 md:mb-8 max-w-2xl">
-                From premium laptops to comprehensive digital services, insurance, and loans - 
-                everything you need in one place.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start">
-                <Link
-                  to="/products"
-                  className="btn-primary text-sm md:text-base px-4 md:px-6 py-2 md:py-3 bg-white text-primary-600 hover:bg-gray-100"
+              {/* Left Content */}
+              <div className="text-center lg:text-left">
+                <motion.h1 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6"
                 >
-                  Shop Products
-                </Link>
-                <Link
-                  to="/services"
-                  className="btn-outline text-sm md:text-base px-4 md:px-6 py-2 md:py-3 border-white text-white hover:bg-white hover:text-primary-600"
+                  {heroSlides[currentSlide].title}
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                    {heroSlides[currentSlide].highlight}
+                  </span>
+                </motion.h1>
+                <motion.p 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 md:mb-8 max-w-2xl"
                 >
-                  Explore Services
-                </Link>
+                  {heroSlides[currentSlide].description}
+                </motion.p>
+                <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start"
+                >
+                  <Link
+                    to={heroSlides[currentSlide].primaryBtn.link}
+                    className="btn-primary text-sm md:text-base px-4 md:px-6 py-2 md:py-3 bg-white text-primary-600 hover:bg-gray-100"
+                  >
+                    {heroSlides[currentSlide].primaryBtn.text}
+                  </Link>
+                  <Link
+                    to={heroSlides[currentSlide].secondaryBtn.link}
+                    className="btn-outline text-sm md:text-base px-4 md:px-6 py-2 md:py-3 border-white text-white hover:bg-white hover:text-primary-600"
+                  >
+                    {heroSlides[currentSlide].secondaryBtn.text}
+                  </Link>
+                </motion.div>
               </div>
-            </motion.div>
 
-            {/* Right Content - Custom Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative">
-              <div className="relative w-full max-w-sm md:max-w-lg mx-auto">
-                {/* Hero Image Container */}
-                <div className="relative h-80 md:h-96  backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl">    
-                  <img
-                    src={hero_image} //Replace with {HeroImage} after importing
-                    alt="VM Solutiions- Your Tech Partner"
-                    className="w-full h-full object-cover"
-                  />    
+              {/* Right Content - Image */}
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="relative"
+              >
+                <div className="relative w-full max-w-sm md:max-w-lg mx-auto">
+                  <div className="relative h-80 md:h-96 backdrop-blur-sm rounded-2xl overflow-hidden ">    
+                    <img
+                      src={heroSlides[currentSlide].image}
+                      alt={`VM Solutiions - ${heroSlides[currentSlide].title}`}
+                      className="w-full h-full object-cover"
+                    />    
+                  </div>
                 </div>
-                {/* Floating Elements */}    
-              </div>
+              </motion.div>
             </motion.div>
-          </div> 
+          </AnimatePresence>
+
+          {/* Navigation Arrows */}
+          
+          
+
+          {/* Slide Indicators */}
+          
         </div>
+
         {/* Scroll Indicator */}
         <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="animate-bounce">
@@ -211,143 +347,6 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Featured Products Section */}
-      <section className="py-16 md:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Products
-            </h2>
-            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our wide range of premium laptops and tech accessories
-            </p>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              {[...Array(8)].map((_, index) => (
-                <div key={index} className="card p-4 md:p-6 animate-pulse">
-                  <div className="bg-gray-300 h-40 md:h-48 rounded-lg mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
-                  <div className="h-8 bg-gray-300 rounded"></div>
-                </div>
-              ))}
-            </div>
-          ) : allProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              {allProducts.map((product, index) => (
-                <motion.div
-                  key={product._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="card group hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={product.images[0] || 'https://images.pexels.com/photos/3987066/pexels-photo-3987066.jpeg'}
-                      alt={product.name}
-                      className="w-full h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {product.hasOffer && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                        Sale
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center">
-                      <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                      <span className="text-xs ml-1">{product.ratings?.average || 4.5}</span>
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                      <div className="flex space-x-2">
-                        <Link
-                          to={`/products/${product._id}`}
-                          className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors duration-200"
-                        >
-                          <Eye className="w-4 h-4 text-gray-600" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 md:p-6">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-primary-600 transition-colors duration-300 line-clamp-2">
-                        {product.name}
-                      </h3>
-                      {product.stock > 0 ? (
-                        <span className="text-green-600 text-xs font-medium">In Stock</span>
-                      ) : (
-                        <span className="text-red-600 text-xs font-medium">Out of Stock</span>
-                      )}
-                    </div>
-                    
-                    <p className="text-gray-600 text-xs md:text-sm mb-4 line-clamp-2">
-                      {product.description}
-                    </p>
-                    
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        {product.originalPrice && (
-                          <span className="text-gray-400 line-through text-xs">
-                            ₹{product.originalPrice.toLocaleString()}
-                          </span>
-                        )}
-                        <span className="text-base md:text-lg font-bold text-primary-600">
-                          ₹{product.price.toLocaleString()}
-                        </span>
-                      </div>
-                      {product.brand && (
-                        <span className="text-xs text-gray-500">{product.brand}</span>
-                      )}
-                    </div>
-                    
-                    <div className="flex space-x-2">
-                      <Link
-                        to={`/products/${product._id}`}
-                        className="flex-1 btn-outline text-center py-2 text-xs"
-                      >
-                        View Details
-                      </Link>
-                      <button
-                        onClick={() => handleAddToCart(product)}
-                        disabled={product.stock === 0}
-                        className="flex-1 btn-primary py-2 text-xs flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ShoppingCart className="w-3 h-3 mr-1" />
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <ShoppingBag className="w-16 h-16 mx-auto" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No products available</h3>
-              <p className="text-gray-600">Check back later for new products</p>
-            </div>
-          )}
-
-          {/* View All Products Button */}
-          {allProducts.length > 0 && (
-            <div className="text-center mt-12">
-              <Link
-                to="/products"
-                className="btn-primary inline-flex items-center"
-              >
-                View All Products
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </div>
-          )}
         </div>
       </section>
 
@@ -431,6 +430,77 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Happy Customers / Testimonials Section */}
+    <section className="py-16 md:py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
+  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div className="text-center mb-12 md:mb-16">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Our Success Stories
+      </h2>
+      <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+        Humne in businesses ko digital hone mein madad ki hai.
+      </p>
+    </div>
+
+    {/* Bottom Grid for Desktop */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+      {testimonials.slice(0, 6).map((item, index) => (
+        <div key={index} className="group bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300">
+          
+          {/* Website Preview Image */}
+          <div className="relative h-48 overflow-hidden bg-gray-200">
+            <img 
+              src={item.previewImage} 
+              alt={`${item.firm} website preview`}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+               <a 
+                href={item.website} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2"
+              >
+              </a>
+            </div>
+          </div>
+
+          <div className="p-6">
+            {/* Firm & Icon Header */}
+            <div className="flex items-center gap-3 mb-4">
+              <img src={item.image} className="w-10 h-10 rounded-full border border-primary-100" alt={item.name} />
+              <div className="flex-1">
+                <h5 className="font-bold text-gray-900 text-sm leading-tight">{item.firm}</h5>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">{item.name} • {item.role}</p>
+              </div>
+            </div>
+
+            {/* Testimonial Text */}
+            <p className="text-gray-600 text-sm italic mb-4 line-clamp-2">
+              "{item.text}"
+            </p>
+
+            {/* Visit Website Link */}
+            <div className="pt-4 border-t border-gray-50 flex justify-between items-center">
+               <a 
+                href={item.website} 
+                target="_blank" 
+                className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1"
+              >
+                {item.website.replace('https://', '')}
+              </a>
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
       {/* Quick Access to Insurance & Loans */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -492,8 +562,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-
     </div>
   )
 }

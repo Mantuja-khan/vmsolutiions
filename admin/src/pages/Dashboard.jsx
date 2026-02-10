@@ -42,7 +42,7 @@ const Dashboard = () => {
       setLoading(true)
       setError(null)
       
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/dashboard`)
+      const response = await axios.get(`http://localhost:3000/admin/dashboard`)
       const { stats, recentOrders, recentApplications } = response.data
       
       setStats(stats || {

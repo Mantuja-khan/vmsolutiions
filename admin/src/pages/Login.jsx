@@ -31,7 +31,7 @@ const Login = () => {
       localStorage.removeItem('adminData')
       delete axios.defaults.headers.common['Authorization']
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/login`, formData)
+      const response = await axios.post(`http://localhost:3000/admin/login`, formData)
       const { token, admin } = response.data
       
       // Verify the token is properly formatted
